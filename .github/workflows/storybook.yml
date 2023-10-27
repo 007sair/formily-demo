@@ -41,8 +41,8 @@ jobs:
       - name: build storybook
         run: pnpm run build-storybook
         
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.6.2
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: storybook-static # output folder from `npm run build-storybook`
