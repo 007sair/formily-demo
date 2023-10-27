@@ -11,7 +11,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "homepage": ".",
+  "homepage": "https://007sair.github.io/formily-demo/",
   "dependencies": {
     "@ant-design/icons": "^5.2.5",
     "@formily/antd-v5": "^1.1.0",
