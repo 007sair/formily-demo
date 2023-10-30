@@ -23,7 +23,6 @@ import {
   Switch,
 } from "@formily/antd-v5";
 import type { FormProps } from "@formily/antd-v5";
-import AsyncSelect from "@/components/AsyncSelect";
 import { useMemo } from "react";
 import ActionButtons from "@/components/ActionButtons";
 import Card from "@/components/Card";
@@ -34,7 +33,6 @@ const SchemaField = createSchemaField({
   components: {
     FormItem,
     Input,
-    AsyncSelect,
     SelectTable,
     Select,
     ArrayTable,

@@ -41,6 +41,27 @@ export const story_2: Story = {
           },
           "x-reactions": "{{ useAsyncDataSource }}",
         },
+        value_with_function_by_gh: {
+          type: "string",
+          title: "搜索Github仓库",
+          description: "service指定函数名，params独立配置，支持搜索",
+          "x-decorator": "FormItem",
+          "x-component": "Select",
+          "x-component-props": {
+            placeholder: "请选择下拉项",
+            request: {
+              service: "{{ queryRepositories }}",
+              params: {
+                q: "",
+              },
+            },
+            showSearch: true,
+            filterOption: false,
+            onSearch:
+              "{{ str => $self.componentProps.request.params.q = str }}",
+          },
+          "x-reactions": "{{ useAsyncDataSource }}",
+        },
       },
     },
   },

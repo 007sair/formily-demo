@@ -19,7 +19,6 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     // Merge custom configuration into the default config
     return mergeConfig(config, {
-      base: ".",
       server: {
         proxy: {
           "/mock": {
@@ -32,6 +31,11 @@ const config: StorybookConfig = {
             target: "http://www.baidu.com/",
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ""),
+          },
+          "/github": {
+            target: "https://api.github.com/",
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/github/, ""),
           },
         },
       },

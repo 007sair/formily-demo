@@ -15,6 +15,10 @@ interface IHeaderConfig {
 }
 
 interface Options extends RequestInit {
+  /**
+   * URL前缀，一般为反代前缀 或 http协议开头完整接口url
+   */
+  baseURL?: string; // "http" or "/mock/xxx"
   headers?: IHeaderConfig;
   method?: HttpMethod;
   /** GET时使用，POST使用body，但不需要序列化了 */
@@ -29,7 +33,6 @@ type Res<T> = {
 
 const defaultOptions: Options = {
   method: "GET",
-  // credentials: "include",
   headers: {
     "Content-Type": "application/json",
   },
@@ -37,7 +40,7 @@ const defaultOptions: Options = {
 
 // 函数重载，判断返回的类型
 function request<T>(url: string, options?: Options): Promise<T | undefined>;
-function request<T>(url: string, config?: Options, all?: boolean): Promise<any>;
+function request<T>(url: string, config?: Options, all?: boolean): Promise<T>;
 
 // resData: 为true时，request函数会返回带有code、message、data的数据结构
 async function request<T>(url: string, options?: Options, all?: boolean) {
@@ -46,7 +49,7 @@ async function request<T>(url: string, options?: Options, all?: boolean) {
 
     const data = options?.params;
 
-    // TODO: 拼接完整url
+    url = (options.baseURL || "") + url;
 
     if (options.method === "GET") {
       url = qs.stringifyUrl({ url, query: data as StringifiableRecord });

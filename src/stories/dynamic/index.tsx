@@ -1,4 +1,4 @@
-import { Field, createForm } from "@formily/core";
+import { Field, FormPath, createForm } from "@formily/core";
 import { ISchema, createSchemaField } from "@formily/react";
 import {
   Form,
@@ -12,7 +12,7 @@ import {
 import type { FormProps } from "@formily/antd-v5";
 import DynamicSelect from "./DynamicSelect";
 import { useMemo } from "react";
-import { queryBaidu, queryTencent } from "@/service";
+import { queryBaidu, queryTencent, queryRepositories } from "@/service";
 import { action, observe } from "@formily/reactive";
 import http from "@/helper/fetch";
 import { debounce } from "lodash";
@@ -50,9 +50,12 @@ const sameType = (a: unknown, b: unknown) => {
   return type2str(a) === type2str(b);
 };
 
+const disposers: Record<string, () => void> = {};
+
 const useAsyncDataSource = (field: Field) => {
   const request = field.componentProps.request as RequestConfig;
   const { url, method, format, allData = true, silent = true } = request;
+  const fieldPath = FormPath.parse(field.address.entire).toString();
 
   const getParams = () => {
     const { params, staticParams } = request;
@@ -110,7 +113,7 @@ const useAsyncDataSource = (field: Field) => {
       })
       .finally(() => {
         field.loading = false;
-        dispose();
+        typeof disposers[fieldPath] === "function" && disposers[fieldPath]();
       });
   };
 
@@ -118,7 +121,7 @@ const useAsyncDataSource = (field: Field) => {
     loadData();
   }
 
-  const dispose = observe(request, debounce(loadData, 300));
+  disposers[fieldPath] = observe(request, debounce(loadData, 300));
 };
 
 function Demo({ schema, onSubmit, ...formProps }: Props) {
@@ -132,6 +135,7 @@ function Demo({ schema, onSubmit, ...formProps }: Props) {
           scope={{
             queryBaidu,
             queryTencent,
+            queryRepositories,
             useAsyncDataSource,
           }}
         />

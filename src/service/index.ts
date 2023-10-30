@@ -1,75 +1,67 @@
-import request from "../helper/request";
-import fetch from "../helper/fetch";
+import request from "../helper/fetch";
 
-type TSelectRemoteParams = {
-  url: string;
-  method: "GET" | "POST";
-};
+const isDev = import.meta.env.MODE === "development";
 
 /**
- * 获取xrender select下拉项通用接口
- * @deprecated
+ * request函数默认返回响应体的data字段数据
+ * 给request第3个参数设置true后，将返回响应体全量数据
  */
-export const getSelectRemoteOptions = ({
-  url,
-  method,
-  ...rest
-}: TSelectRemoteParams) => {
-  return request({
-    url: url,
-    credentials: "include",
-    method: method,
-    data: rest,
-  });
-};
-
-//校验表名是否唯一
-export const validateTableName = (params: { tableName: string }) => {
-  return request({
-    url: "/uniqueValidate",
-    credentials: "include",
-    method: "GET",
-    params,
-  });
-};
+const USE_FULL_DATA = true;
 
 /**
  * 百度搜索
  * @param keyword 搜索关键字
  */
+type BaiduRes = {
+  g?: Array<{ q: string }>;
+};
 export const queryBaidu = (keyword: string) => {
   const params = { wd: keyword, prod: "pc" };
-  return fetch("/api/sugrec", { params }, true).then((res: any) =>
-    res?.g.map((item: any) => ({ label: item.q, value: item.q }))
-  );
+  return request<BaiduRes>(
+    "/sugrec",
+    { baseURL: "/api", params },
+    USE_FULL_DATA
+  ).then((res) => res.g?.map((item) => ({ label: item.q, value: item.q })));
 };
 
 /**
  * 腾讯地图搜素
  */
+type TencentRes = {
+  data?: Array<{ title: string; id: string }>;
+};
 export const queryTencent = (keyword: string) => {
   const params = {
     key: "L6QBZ-UDFCQ-G6T5R-4D5KA-MV6BV-THFZJ",
     keyword,
   };
-  return fetch("/mock/ws/place/v1/suggestion", { params }, true).then((res) =>
-    res?.data.map((item: any) => ({ label: item.title, value: item.id }))
+  return request<TencentRes>(
+    "/ws/place/v1/suggestion",
+    { baseURL: "/mock", params },
+    USE_FULL_DATA
+  ).then((res) =>
+    res.data?.map((item) => ({ label: item.title, value: item.id }))
   );
 };
 
 /**
- * mock select options
+ * Github 搜索仓库
+ * @usage https://api.github.com/search/repositories?q={query}{&page,per_page,sort,order}
+ * @param params
+ * @returns
  */
-export const queryMockOptions = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        data: [
-          { label: "全部", value: 0 },
-          { label: "自营", value: 1 },
-          { label: "POP", value: 2 },
-        ],
-      });
-    }, 1000);
-  });
+type GithubRepRes = {
+  total_count: number;
+  incomplete_results: boolean;
+  items: Array<{ id: number; full_name: string }>;
+};
+
+export const queryRepositories = (params: { q: string }) => {
+  return request<GithubRepRes>(
+    "/search/repositories",
+    { baseURL: isDev ? "/github" : "", params },
+    USE_FULL_DATA
+  ).then((res) =>
+    res?.items.map((item) => ({ label: item.full_name, value: item.id }))
+  );
 };
