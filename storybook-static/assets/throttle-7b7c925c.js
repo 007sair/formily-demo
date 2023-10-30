@@ -1,0 +1,2 @@
+import{g as n}from"./_commonjsHelpers-de833af9.js";import{d as o}from"./debounce-260238ac.js";import{i as l}from"./isSymbol-a9de136b.js";var g=o,f=l,c="Expected a function";function d(i,a,t){var r=!0,e=!0;if(typeof i!="function")throw new TypeError(c);return f(t)&&(r="leading"in t?!!t.leading:r,e="trailing"in t?!!t.trailing:e),g(i,a,{leading:r,maxWait:a,trailing:e})}var m=d;const b=n(m);export{b as t};
+//# sourceMappingURL=throttle-7b7c925c.js.map
