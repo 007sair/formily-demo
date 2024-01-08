@@ -21,21 +21,10 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       server: {
         proxy: {
-          "/mock": {
-            // https://lbs.qq.com/service/webService/webServiceGuide/webServiceSuggestion
+          "/api": {
             target: "https://apis.map.qq.com",
             changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/mock/, ""),
-          },
-          "/api": {
-            target: "http://www.baidu.com/",
-            changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ""),
-          },
-          "/github": {
-            target: "https://api.github.com/",
-            changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/github/, ""),
           },
         },
       },

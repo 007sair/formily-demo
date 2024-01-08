@@ -38,6 +38,8 @@ const defaultOptions: Options = {
   },
 };
 
+const baseURL = import.meta.env.VITE_BASIC_API; // "/api" or "http://xxx.xxx"
+
 // 函数重载，判断返回的类型
 function request<T>(url: string, options?: Options): Promise<T | undefined>;
 function request<T>(url: string, config?: Options, all?: boolean): Promise<T>;
@@ -46,23 +48,23 @@ function request<T>(url: string, config?: Options, all?: boolean): Promise<T>;
 async function request<T>(url: string, options?: Options, all?: boolean) {
   try {
     options = Object.assign(defaultOptions, options);
+    const { params } = options;
 
-    const data = options?.params;
-
-    url = (options.baseURL || "") + url;
+    url = (options.baseURL || baseURL) + url;
 
     if (options.method === "GET") {
-      url = qs.stringifyUrl({ url, query: data as StringifiableRecord });
+      url = qs.stringifyUrl({ url, query: params as StringifiableRecord });
     } else {
       /**
        * 处理参数中存在二进制文件时，不需要加content-type
        * 浏览器发现是二进制文件，会自动加content-type和boundary
        * 手动加content-type的话 boundary中的内容会丢失
        */
-      if (data instanceof FormData && options.headers?.["Content-Type"]) {
+      if (params instanceof FormData && options.headers?.["Content-Type"]) {
         delete options.headers["Content-Type"];
       }
-      options.body = data instanceof FormData ? data : JSON.stringify(data);
+      options.body =
+        params instanceof FormData ? params : JSON.stringify(params);
     }
 
     const response = await fetch(url, options);

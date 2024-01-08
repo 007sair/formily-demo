@@ -13,7 +13,7 @@ export default function DemoWrapper({ paragraph }: Props) {
         Introduction
       </Title>
       {paragraph.map((p) => (
-        <Paragraph>{p}</Paragraph>
+        <Paragraph key={p}>{p}</Paragraph>
       ))}
       <Title level={3} style={{ marginTop: 0 }}>
         Demo
