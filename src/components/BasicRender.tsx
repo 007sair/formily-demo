@@ -5,65 +5,10 @@
  */
 
 import { createForm } from "@formily/core";
-import { createSchemaField, ISchemaFieldProps } from "@formily/react";
-import {
-  Form,
-  FormItem,
-  Input,
-  SelectTable,
-  Select,
-  ArrayTable,
-  Password,
-  NumberPicker,
-  Radio,
-  Editable,
-  Submit,
-  DatePicker,
-  FormCollapse,
-  FormGrid,
-  Space,
-  PreviewText,
-  Checkbox,
-  ArrayItems,
-  FormTab,
-  Switch,
-  FormLayout,
-} from "@formily/antd-v5";
+import { ISchemaFieldProps } from "@formily/react";
+import { Form, Submit } from "@formily/antd-v5";
 import { useMemo } from "react";
-import ActionButtons from "@/components/ActionButtons";
-import Card from "@/components/Card";
-
-const formTab = FormTab.createFormTab();
-
-const SchemaField = createSchemaField({
-  components: {
-    FormItem,
-    Input,
-    SelectTable,
-    Select,
-    ArrayTable,
-    Password,
-    NumberPicker,
-    Radio,
-    Editable,
-    Submit,
-    DatePicker,
-    FormCollapse,
-    FormGrid,
-    Space,
-    PreviewText,
-    ActionButtons,
-    Checkbox,
-    Card,
-    ArrayItems,
-    FormTab,
-    Switch,
-    FormLayout,
-  },
-  scope: {
-    formTab,
-  },
-});
+import { SchemaField } from "./SchemaField";
 
 type Props = ISchemaFieldProps & {
   hiddenSubmit?: boolean;

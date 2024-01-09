@@ -76,38 +76,18 @@ async function request<T>(url: string, options?: Options, all?: boolean) {
 
     const result: Res<T> = await response.json();
 
-    // const contentType = response.headers.get('Content-type')
-
-    // // 判定返回的内容类型，做不同的处理
-    // if (contentType) {
-    //   if (contentType.indexOf("json") > -1) {
-    //     result = await response.json();
-    //   }
-    //   if (contentType.indexOf("text") > -1) {
-    //     result = await response.text();
-    //   }
-    //   if (contentType.indexOf("form") > -1) {
-    //     result = await response.formData();
-    //   }
-    //   if (contentType.indexOf("video") > -1) {
-    //     result = await response.blob();
-    //   }
-    // } else {
-    //   result = await response.text();
-    // }
-
     if (all) {
       return result;
-    } else {
-      switch (result.code) {
-        case 200:
-          return result.data;
-        default:
-          return Promise.reject({
-            code: result.code || -1,
-            message: result.message || "接口请求失败",
-          });
-      }
+    }
+
+    switch (result.code) {
+      case 200:
+        return result.data;
+      default:
+        return Promise.reject({
+          code: result.code || -1,
+          message: result.message || "接口请求失败",
+        });
     }
   } catch (error) {
     return Promise.reject(error);

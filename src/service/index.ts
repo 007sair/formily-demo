@@ -1,4 +1,4 @@
-import request from "../helper/fetch";
+import request from "@/utils/fetch";
 
 /**
  * request函数默认返回响应体的data字段数据
